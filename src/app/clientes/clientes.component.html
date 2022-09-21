@@ -18,7 +18,7 @@
             <td>{{cliente.nombre}}</td>
             <td>{{cliente.apellido}}</td>
             <td>{{cliente.email}}</td>
-            <td>{{cliente.createAt}}</td>
+            <td>{{ cliente.createAt | date:'dd/MM/yyyy' }}</td>
           </tr>
         </tbody>
     </table>
