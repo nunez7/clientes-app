@@ -14,7 +14,10 @@ export class ClientesComponent implements OnInit {
 
   //Asignamos los valores del array
   ngOnInit(): void {
-    this.clientes = this.clienteService.getClientes();
+   //Asigna el observador al array a traves de una funcion
+   this.clienteService.getClientes().subscribe(
+      (clientes) => this.clientes = clientes
+   );
   }
 
 }
