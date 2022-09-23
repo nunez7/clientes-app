@@ -3,6 +3,7 @@ import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-form',
@@ -11,13 +12,24 @@ import Swal from 'sweetalert2';
 export class FormComponent implements OnInit {
   public cliente: Cliente = new Cliente();
   public titulo:string = "Crear Cliente";
+  clientForm!: FormGroup;
 
   constructor(private clienteService: ClienteService,
   private router: Router,
-  private activatedRoute: ActivatedRoute) { }
+  private activatedRoute: ActivatedRoute,
+  private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.clientForm = this.initForm();
     this.cargarCliente();
+  }
+
+  initForm(): FormGroup{
+      return this.fb.group({
+        nombre: ['', [Validators.required, Validators.minLength(4)]],
+        apellido: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+      })
   }
 
   cargarCliente(): void{

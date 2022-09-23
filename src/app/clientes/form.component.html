@@ -2,30 +2,45 @@
 <div class="card bg-dark text-white">
   <div class="card-header">{{ titulo }}</div>
   <div class="card-body">
-      <form method="post">
+      <form method="post" action="#" [formGroup]="clientForm" novalidate>
           <div class="form-group row">
               <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
               <div class="col-sm-6">
-                <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre">
+                <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" id="nombre" required minlenght="4" formControlName="nombre">
+                <div class="alert alert-danger" *ngIf="clientForm.get('nombre')?.touched && clientForm.get('nombre')?.errors?.['required']">
+                      Este campo es requerido
+                </div>
+                <div class="alert alert-danger" *ngIf="clientForm.get('nombre')?.touched && clientForm.get('nombre')?.errors?.['minlenght']">
+                      Debes escribir 4 caracteres como mínimo
+                </div>
               </div>
           </div>
           <div class="form-group row mt-1">
               <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
               <div class="col-sm-6">
-                <input type="text" name="apellido" class="form-control" [(ngModel)]="cliente.apellido">
+                <input type="text" name="apellido" class="form-control" [(ngModel)]="cliente.apellido" required formControlName="apellido">
+                <div class="alert alert-danger" *ngIf="clientForm.get('apellido')?.touched && clientForm.get('apellido')?.errors?.['required']">
+                      Este campo es requerido
+                </div>
               </div>
           </div>
           <div class="form-group row mt-1">
               <label for="email" class="col-form-label col-sm-2">Email</label>
               <div class="col-sm-6">
-                <input type="email" name="email" class="form-control" [(ngModel)]="cliente.email">
+                <input type="email" name="email" class="form-control" [(ngModel)]="cliente.email" required formControlName="email">
+                <div class="alert alert-danger" *ngIf="clientForm.get('email')?.touched && clientForm.get('email')?.errors?.['required']">
+                      Este campo es requerido
+                </div>
+                <div class="alert alert-danger" *ngIf="clientForm.get('email')?.touched && clientForm.get('email')?.errors?.['email']">
+                      Escribe un email
+                </div>
               </div>
           </div>
           <div class="form-group row mt-1">
               <div class="col-sm-6">
-                  <button name="button" role="button" (click)='create()' *ngIf="!cliente.id; else elseBlock" class="btn btn-primary" role="button">Crear</button>
+                  <button name="savebtn" role="button" (click)='create()' *ngIf="!cliente.id; else elseBlock" [disabled]="clientForm.invalid" class="btn btn-primary" role="button">Crear</button>
                   <ng-template #elseBlock>
-                    <button name="button" role="button" (click)='update()' class="btn btn-primary" role="button">Actualizar</button>
+                    <button name="updatebtn" role="button" (click)='update()' class="btn btn-primary" role="button">Actualizar</button>
                   </ng-template>
               </div>
           </div>
