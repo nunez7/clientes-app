@@ -12,6 +12,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 export class FormComponent implements OnInit {
   public cliente: Cliente = new Cliente();
   public titulo:string = "Crear Cliente";
+  public errores: string[];
   clientForm!: FormGroup;
 
   constructor(private clienteService: ClienteService,
@@ -47,8 +48,12 @@ export class FormComponent implements OnInit {
     .subscribe(cliente =>{
       this.router.navigate(['/clientes'])
       Swal.fire('Nuevo cliente', `El cliente ${cliente.nombre} ha sido creado con éxito`, 'success')
+    },
+    err => {
+      this.errores = err.error.error as string[];
+      console.error('Código del error: '+err.status);
     }
-    )
+  );
   }
 
   update():void{
@@ -56,8 +61,12 @@ export class FormComponent implements OnInit {
     .subscribe(json =>{
       this.router.navigate(['/clientes'])
       Swal.fire('Cliente actualizado', `${json.mensaje}: ${json.cliente.nombre}`, 'success')
+    },
+    err => {
+      this.errores = err.error.error as string[];
+      console.error('Código del error: '+err.status);
     }
-  )
+  );
   }
 
 }

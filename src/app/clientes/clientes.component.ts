@@ -38,6 +38,7 @@ export class ClientesComponent implements OnInit {
           response => {
             //Actualizamos la lista
             this.clientes = this.clientes.filter(cli => cli !== cliente)
+            //Enviamos el mensaje
             Swal.fire(
               'Cliente borrado!',
               'Cliente eliminado con éxito',

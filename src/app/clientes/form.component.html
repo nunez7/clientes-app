@@ -1,4 +1,10 @@
 <br >
+<!--<ul class="alert alert-danger" *ngIf="errores.length >0 ">
+  <li *ngFor="let err of errores">
+    {{ err }}
+  </li>
+</ul>-->
+
 <div class="card bg-dark text-white">
   <div class="card-header">{{ titulo }}</div>
   <div class="card-body">
@@ -7,12 +13,12 @@
               <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
               <div class="col-sm-6">
                 <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" id="nombre" required minlenght="4" formControlName="nombre">
-                <div class="alert alert-danger" *ngIf="clientForm.get('nombre')?.touched && clientForm.get('nombre')?.errors?.['required']">
+                 <div class="alert alert-danger" *ngIf="clientForm.get('nombre')?.touched && clientForm.get('nombre')?.errors?.['required']">
                       Este campo es requerido
                 </div>
-                <div class="alert alert-danger" *ngIf="clientForm.get('nombre')?.touched && clientForm.get('nombre')?.errors?.['minlenght']">
+               <div class="alert alert-danger" *ngIf="clientForm.get('nombre')?.touched && clientForm.get('nombre')?.errors?.['minlenght']">
                       Debes escribir 4 caracteres como mínimo
-                </div>
+                </div> 
               </div>
           </div>
           <div class="form-group row mt-1">
