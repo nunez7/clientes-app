@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import localeES from '@angular/common/locales/es';
+import {registerLocaleData} from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -11,6 +13,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+//Config del idioma
+registerLocaleData(localeES, 'es');
 
 const routes: Routes = [
   {path: '', redirectTo: '/clientes', pathMatch: 'full'},
