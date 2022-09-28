@@ -19,22 +19,20 @@ export class ClienteService {
   constructor(private http: HttpClient, private router: Router) { }
   //Observable es patron que verifica cambios
   //Of convierte los datos
-  getClientes(): Observable<Cliente[]>{
+  getClientes(page: number): Observable<any>{
     //return of(CLIENTES);
-    return this.http.get(this.urlEndPoint).pipe(
-      tap(response => {
-        let clientes = response as Cliente[];
+    return this.http.get(this.urlEndPoint+'/page/'+page).pipe(
+      tap((response: any) => {
         console.log('ClienteService: tap 1');
-        clientes.forEach(
+        (response.content as Cliente[]).forEach(
           cliente => {
             console.log(cliente.nombre);
           }
         )
       }),
-      map((response) => {
-        let clientes = response as Cliente[];
+      map((response: any) => {
         //retorna el map de clientes
-        return clientes.map(cliente => {
+        (response.content as Cliente[]).map(cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
           cliente.apellido = cliente.apellido.toUpperCase();
           cliente.createAt = formatDate(cliente.createAt, 'EEEE dd, MM yyyy', 'es');
@@ -42,10 +40,11 @@ export class ClienteService {
           //retorna el map de objeto modificado
           return cliente;
         });
+        return response;
       }),
       tap(response => {
         console.log('ClienteService: tap 2');
-        response.forEach(
+        (response.content as Cliente[]).forEach(
           cliente => {
             console.log(cliente.nombre);
           }
