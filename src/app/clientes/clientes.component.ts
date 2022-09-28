@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
+import { tap } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,7 +17,16 @@ export class ClientesComponent implements OnInit {
   //Asignamos los valores del array
   ngOnInit(): void {
     //Asigna el observador al array a traves de una funcion
-    this.clienteService.getClientes().subscribe(
+    this.clienteService.getClientes().pipe(
+      tap(clientes => {
+        console.log('ClienteComponent: tap 3');
+        clientes.forEach(
+          cliente => {
+            console.log(cliente.nombre);
+          }
+        );
+      })
+    ).subscribe(
       (clientes) => this.clientes = clientes
     );
   }
