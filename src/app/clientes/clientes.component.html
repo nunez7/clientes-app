@@ -7,7 +7,7 @@
       <button type="button" name="button" class="btn btn-rounded btn-primary" [routerLink] = "['/clientes/form']">Crear Cliente</button>
     </div>
 
-    <table class="table table-bordered table-striped" *ngIf="clientes.length >0 else elseBlockM">
+    <table class="table table-bordered table-striped" *ngIf="clientes?.length || 0 > 0 else elseBlockM">
         <thead>
           <tr>
             <th>ID</th>
@@ -36,6 +36,7 @@
           </tr>
         </tbody>
     </table>
+    <paginator-nav [paginador]="paginador" *ngIf="paginador" ></paginator-nav>
     <ng-template #elseBlockM>
       <div class="alert alert-info">
           No hay registros en la Base de Datos
