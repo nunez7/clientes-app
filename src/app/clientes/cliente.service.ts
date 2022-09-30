@@ -93,7 +93,7 @@ export class ClienteService {
       })
     );
   }
-
+  //borrar cliente
   delete(id: number): Observable<Cliente>{
     return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.HttpHeaders}).pipe(
       catchError(e => {
@@ -104,4 +104,18 @@ export class ClienteService {
     );
   }
 
+  //Subir la foto
+  subirFoto(archivo: File, id: any): Observable<Cliente>{
+    let formData = new FormData();
+    formData.append("archivo", archivo);
+    formData.append("id", id);
+    return this.http.post(`${this.urlEndPoint}/upload`, formData).pipe(
+      map((response: any) => response.cliente as Cliente),
+      catchError(e => {
+          console.log(e.error.mensaje);
+          Swal.fire('Error al subir la imagen', e.error.mensaje, 'error');
+          return throwError(() => e);
+      })
+    );
+  }
 }
