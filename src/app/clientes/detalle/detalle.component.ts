@@ -3,6 +3,7 @@ import { Cliente} from '../cliente';
 import { ClienteService } from '../cliente.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'detalle-cliente',
@@ -13,12 +14,13 @@ export class DetalleComponent implements OnInit {
   cliente: Cliente;
   titulo: string = "Detalle del cliente";
   public fotoSeleccionada: any;
+  progreso: number = 0;
 
   constructor(private clienteService: ClienteService,
   private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log("FOTO "+this.fotoSeleccionada);
+    //console.log("FOTO "+this.fotoSeleccionada);
     this.activatedRoute.paramMap.subscribe(
       params =>{
         let id:number = Number(params.get('id'));
@@ -34,6 +36,7 @@ export class DetalleComponent implements OnInit {
 
   seleccionarFoto(event: any){
     this.fotoSeleccionada = event.target.files[0];
+    this.progreso = 0;
     //console.log(this.fotoSeleccionada);
     if(this.fotoSeleccionada.type.indexOf('image') <0 ){
       Swal.fire('Error al seleccionar imagen: ', 'El archivo debe ser imagen', 'error');
@@ -47,13 +50,19 @@ export class DetalleComponent implements OnInit {
     }else{
       this.clienteService.subirFoto(this.fotoSeleccionada, this.cliente.id)
       .subscribe(
-        cliente => {
-          this.cliente = cliente;
-          Swal.fire(
-            'Foto subida!',
-            `Foto del cliente actualizada con éxito ${this.cliente.foto} `,
-            'success'
-          )
+        event => {
+          //this.cliente = cliente;
+          if(event.type=== HttpEventType.UploadProgress){
+            this.progreso = event.total ? Math.round(100 * event.loaded / event.total) : 0;
+          }else if(event.type === HttpEventType.Response){
+            let response: any = event.body;
+            this.cliente = response.cliente as Cliente;
+            Swal.fire(
+                'Foto subida!',
+                response.mensaje,
+                'success'
+            )
+          }
         }
       );
       }
