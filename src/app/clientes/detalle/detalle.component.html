@@ -15,7 +15,7 @@
               <input (change)="seleccionarFoto($event)" type="file" class="form-control" id="inputGroupFile04">
             </div>
             <div class="input-group-append">
-              <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button">Subir</button>
+              <button (click)="subirFoto()" class="btn btn-outline-secondary" [ngClass]="{'disabled' : !fotoSeleccionada}" type="button">Subir</button>
             </div>
           </div>
         </div>
