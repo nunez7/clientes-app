@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Cliente} from '../cliente';
 import { ClienteService } from '../cliente.service';
-import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'detalle-cliente',
@@ -16,11 +16,9 @@ export class DetalleComponent implements OnInit {
   public fotoSeleccionada: any;
   progreso: number = 0;
 
-  constructor(private clienteService: ClienteService,
-  private activatedRoute: ActivatedRoute) { }
+  constructor(private clienteService: ClienteService, public activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
-
   }
 
   seleccionarFoto(event: any){

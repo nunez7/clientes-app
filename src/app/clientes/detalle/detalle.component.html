@@ -1,33 +1,39 @@
-<div class="card text-black">
-  <div class="card-header">{{ titulo }}</div>
-  <div class="card-body">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-6">
-          <ul class="list-group mb-3" *ngIf="cliente">
-            <li class="list-group-item">{{cliente.nombre}}</li>
-            <li class="list-group-item">{{cliente.apellido}}</li>
-            <li class="list-group-item">{{cliente.email}}</li>
-            <li class="list-group-item">{{cliente.createAt | date: "fullDate"}}</li>
-          </ul>
-          <div class="input-group mb-3">
-            <div class="custom-file">
-              <input (change)="seleccionarFoto($event)" type="file" class="form-control" id="inputGroupFile04">
+<div class="modal-header">
+        <h2 class="modal-title">{{ titulo }}</h2>
+        <button type="button" class="btn-close" (click)="activeModal.close('Close click')" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6">
+              <ul class="list-group mb-3" *ngIf="cliente">
+                <li class="list-group-item">{{cliente.nombre}}</li>
+                <li class="list-group-item">{{cliente.apellido}}</li>
+                <li class="list-group-item">{{cliente.email}}</li>
+                <li class="list-group-item">{{cliente.createAt}}</li>
+              </ul>
+              <div class="container mb-3">
+                <div class="row">
+                <div class="col-md-10">
+                  <input (change)="seleccionarFoto($event)" type="file" class="form-control" id="inputGroupFile04">
+                </div>
+                <div class="col-md-2">
+                  <button (click)="subirFoto()" class="btn btn-outline-secondary" [ngClass]="{'disabled' : !fotoSeleccionada}" type="button">Subir</button>
+                </div>
+              </div>
+              </div>
+              <div class="progress" *ngIf="progreso >0 " style="height: 40px;">
+                <div class="progress-bar progress-bar-striped" role="progressbar" [ngStyle]="{width: progreso+'%'}" attr.aria-valuenow="{{progreso}}" aria-valuemin="0" aria-valuemax="100">
+                    {{progreso}}%
+                </div>
+              </div>
             </div>
-            <div class="input-group-append">
-              <button (click)="subirFoto()" class="btn btn-outline-secondary" [ngClass]="{'disabled' : !fotoSeleccionada}" type="button">Subir</button>
-            </div>
-          </div>
-          <div class="progress" *ngIf="progreso >0 " style="height: 40px;">
-            <div class="progress-bar progress-bar-striped" role="progressbar" [ngStyle]="{width: progreso+'%'}" attr.aria-valuenow="{{progreso}}" aria-valuemin="0" aria-valuemax="100">
-                {{progreso}}%
-            </div>
+              <div class="col-sm-6">
+                  <img *ngIf="cliente?.foto" class="img-fluid rounded" width="80%" src="http://localhost:8883/backend-apirest/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}">
+              </div>
           </div>
         </div>
-          <div class="col-sm-6">
-              <img *ngIf="cliente?.foto" class="img-fluid rounded" width="80%" src="http://localhost:8883/backend-apirest/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}">
-          </div>
-      </div>
-    </div>
-  </div>
+</div>
+<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')" >Cerrar</button>
 </div>
