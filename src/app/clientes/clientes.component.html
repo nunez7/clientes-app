@@ -22,7 +22,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let cliente of clientes">
-            <td><button type="button" (click)="abrirModal(cliente)" class="btn btn-secondary btn-sm">{{cliente.id}}</button></td>
+            <td>
+              <img *ngIf="cliente?.foto"  (click)="abrirModal(cliente)"
+              class="img-fluid rounded" style="width: 64px; cursor: pointer;"
+              src="http://localhost:8883/backend-apirest/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}">
+
+              <img *ngIf="!cliente?.foto"  (click)="abrirModal(cliente)"
+              class="img-fluid rounded" style="width: 64px; cursor: pointer;"
+              src="http://localhost:8883/backend-apirest/img/not_user_icon.png" alt="Sin foto">              
+            </td>
             <td>{{cliente.nombre}}</td>
             <td>{{cliente.apellido}}</td>
             <td>{{cliente.email}}</td>
