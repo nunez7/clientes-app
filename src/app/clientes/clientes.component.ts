@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { DetalleComponent } from './detalle/detalle.component';
+import { ModalService } from './detalle/modal.service';
 import { tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import {ActivatedRoute } from '@angular/router';
@@ -20,7 +21,8 @@ export class ClientesComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
   private activatedRoute: ActivatedRoute,
-  private modalService: NgbModal) { }
+  private modalService: NgbModal,
+  private serviceModal: ModalService) { }
 
   //Asignamos los valores del array
   ngOnInit(): void {
@@ -47,8 +49,18 @@ export class ClientesComponent implements OnInit {
        this.paginador = response;
        //console.log("RESPONSE "+JSON.stringify (response.totalPages));
     });
-  }
-);
+  });
+
+  //Se subscribe al evento de cambio de imagen
+  this.serviceModal.notificarUpload.subscribe(cliente => {
+    //Recorremos la lista de los clientes y al que sea igual le cambiamos la imagen
+    this.clientes = this.clientes.map(clienteOriginal => {
+      if(cliente.id==clienteOriginal.id){
+        clienteOriginal.foto = cliente.foto;
+      }
+      return clienteOriginal;
+    })
+  });
 }
 
   delete(cliente: Cliente): void {

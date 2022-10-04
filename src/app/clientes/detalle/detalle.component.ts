@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Cliente} from '../cliente';
 import { ClienteService } from '../cliente.service';
+import { ModalService } from '../detalle/modal.service';
 import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +17,8 @@ export class DetalleComponent implements OnInit {
   public fotoSeleccionada: any;
   progreso: number = 0;
 
-  constructor(private clienteService: ClienteService, public activeModal: NgbActiveModal) {}
+  constructor(private clienteService: ClienteService, public activeModal: NgbActiveModal,
+    private modalService: ModalService) {}
 
   ngOnInit(): void {
   }
@@ -44,6 +46,8 @@ export class DetalleComponent implements OnInit {
           }else if(event.type === HttpEventType.Response){
             let response: any = event.body;
             this.cliente = response.cliente as Cliente;
+            //Eminitmos el cambio de la foto
+            this.modalService.notificarUpload.emit(this.cliente);
             Swal.fire(
                 'Foto subida!',
                 response.mensaje,
