@@ -26,9 +26,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/custom-theme.scss",
               "src/styles.css",
-              "src/assets/css/bootstrap.min.css"
             ],
             "scripts": [
               "src/assets/js/jquery-3.6.1.min.js",

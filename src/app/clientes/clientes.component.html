@@ -10,7 +10,7 @@
     <table class="table table-bordered table-striped" *ngIf="clientes?.length || 0 > 0 else elseBlockM">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Email</th>
@@ -22,7 +22,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let cliente of clientes">
-            <td>{{cliente.id}}</td>
+            <td>
+              <img *ngIf="cliente?.foto"  (click)="abrirModal(cliente)"
+              class="img-fluid rounded" style="width: 64px; cursor: pointer;"
+              src="http://localhost:8883/backend-apirest/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}">
+
+              <img *ngIf="!cliente?.foto"  (click)="abrirModal(cliente)"
+              class="img-fluid rounded" style="width: 64px; cursor: pointer;"
+              src="http://localhost:8883/backend-apirest/img/not_user_icon.png" alt="Sin foto">
+            </td>
             <td>{{cliente.nombre}}</td>
             <td>{{cliente.apellido}}</td>
             <td>{{cliente.email}}</td>

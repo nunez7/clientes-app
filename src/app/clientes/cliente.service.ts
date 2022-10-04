@@ -3,7 +3,7 @@ import {formatDate} from '@angular/common';
 //import { CLIENTES } from './clientes.json';
 import { Cliente } from './cliente';
 import { Observable, map, catchError, throwError, tap } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -93,7 +93,7 @@ export class ClienteService {
       })
     );
   }
-
+  //borrar cliente
   delete(id: number): Observable<Cliente>{
     return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.HttpHeaders}).pipe(
       catchError(e => {
@@ -103,5 +103,16 @@ export class ClienteService {
       })
     );
   }
+  //Subir la foto
+  subirFoto(archivo: File, id: any): Observable<HttpEvent<{}>>{
+    let formData = new FormData();
+    formData.append("archivo", archivo);
+    formData.append("id", id);
 
+    const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, {
+      reportProgress: true
+    });
+
+    return this.http.request(req);
+  }
 }

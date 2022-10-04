@@ -19,6 +19,9 @@ import { MatInputModule} from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDatepickerModule} from '@angular/material/datepicker';
 import { MatMomentDateModule} from '@angular/material-moment-adapter';
+import { DetalleComponent } from './clientes/detalle/detalle.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 //Config del idioma
 registerLocaleData(localeES, 'es');
@@ -40,7 +43,8 @@ const routes: Routes = [
     DirectivaComponent,
     ClientesComponent,
     FormComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DetalleComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,8 @@ const routes: Routes = [
     MatInputModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    NgbModule
   ],
   providers: [ClienteService, {provide: LOCALE_ID, useValue: 'es' }],
   bootstrap: [AppComponent]

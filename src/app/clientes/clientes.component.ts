@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
+import { DetalleComponent } from './detalle/detalle.component';
+import { ModalService } from './detalle/modal.service';
 import { tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import {ActivatedRoute } from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-clientes',
@@ -13,9 +16,13 @@ export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
   paginador: any;
+  clienteSeleccionado: Cliente;
+  closeResult:string = '';
 
   constructor(private clienteService: ClienteService,
-  private activatedRoute: ActivatedRoute) { }
+  private activatedRoute: ActivatedRoute,
+  private modalService: NgbModal,
+  private serviceModal: ModalService) { }
 
   //Asignamos los valores del array
   ngOnInit(): void {
@@ -42,8 +49,18 @@ export class ClientesComponent implements OnInit {
        this.paginador = response;
        //console.log("RESPONSE "+JSON.stringify (response.totalPages));
     });
-  }
-);
+  });
+
+  //Se subscribe al evento de cambio de imagen
+  this.serviceModal.notificarUpload.subscribe(cliente => {
+    //Recorremos la lista de los clientes y al que sea igual le cambiamos la imagen
+    this.clientes = this.clientes.map(clienteOriginal => {
+      if(cliente.id==clienteOriginal.id){
+        clienteOriginal.foto = cliente.foto;
+      }
+      return clienteOriginal;
+    })
+  });
 }
 
   delete(cliente: Cliente): void {
@@ -73,6 +90,15 @@ export class ClientesComponent implements OnInit {
         )
       }
     })
+  }
+
+  //Abrir modal al seleccionar el cliente
+  abrirModal(cliente: Cliente){
+    this.clienteSeleccionado = cliente;
+    //Abre el modal del detalle component
+    //this.modalService.open(DetalleComponent);
+    const modalRef = this.modalService.open(DetalleComponent, {size: 'lg'});
+    modalRef.componentInstance.cliente = this.clienteSeleccionado;
   }
 
 }
