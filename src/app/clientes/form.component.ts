@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
+import { Region } from './region';
 import { ClienteService } from './cliente.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -11,6 +12,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 })
 export class FormComponent implements OnInit {
   public cliente: Cliente = new Cliente();
+  regiones: Region[];
   public titulo:string = "Crear Cliente";
   public errores: string[];
   clientForm!: FormGroup;
@@ -23,12 +25,16 @@ export class FormComponent implements OnInit {
   ngOnInit(): void {
     this.clientForm = this.initForm();
     this.cargarCliente();
+    this.clienteService.getRegiones().subscribe(regiones => {
+      this.regiones = regiones;
+    });
   }
 
   initForm(): FormGroup{
       return this.fb.group({
         nombre: ['', [Validators.required, Validators.minLength(4)]],
         apellido: ['', [Validators.required]],
+        region: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
         createAt: ['', [Validators.required]],
       })

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {formatDate} from '@angular/common';
 //import { CLIENTES } from './clientes.json';
 import { Cliente } from './cliente';
+import { Region } from './region';
 import { Observable, map, catchError, throwError, tap } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -17,6 +18,10 @@ export class ClienteService {
 
   //Establecemos la conexion
   constructor(private http: HttpClient, private router: Router) { }
+  //regiones de los clientes
+  getRegiones(): Observable<Region[]>{
+    return this.http.get<Region[]>(this.urlEndPoint+'/regiones');
+  }
   //Observable es patron que verifica cambios
   //Of convierte los datos
   getClientes(page: number): Observable<any>{
