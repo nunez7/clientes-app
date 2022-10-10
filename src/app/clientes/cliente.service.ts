@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import {formatDate} from '@angular/common';
-//import { CLIENTES } from './clientes.json';
 import { Cliente } from './cliente';
 import { Region } from './region';
 import { Observable, map, catchError, throwError, tap } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
-import Swal from 'sweetalert2';
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -14,10 +13,9 @@ import { Router } from '@angular/router';
 export class ClienteService {
   private urlEndPoint:string = 'http://localhost:8883/backend-apirest/api/clientes';
 
-  private HttpHeaders = new HttpHeaders({'Content-Type':'application/json'});
-
   //Establecemos la conexion
   constructor(private http: HttpClient, private router: Router) { }
+
   //regiones de los clientes
   getRegiones(): Observable<Region[]>{
     return this.http.get<Region[]>(this.urlEndPoint+'/regiones');
@@ -28,7 +26,6 @@ export class ClienteService {
     //return of(CLIENTES);
     return this.http.get(this.urlEndPoint+'/page/'+page).pipe(
       tap((response: any) => {
-        console.log('ClienteService: tap 1');
         (response.content as Cliente[]).forEach(
           cliente => {
             console.log(cliente.nombre);
@@ -48,7 +45,6 @@ export class ClienteService {
         return response;
       }),
       tap(response => {
-        console.log('ClienteService: tap 2');
         (response.content as Cliente[]).forEach(
           cliente => {
             console.log(cliente.nombre);
@@ -60,16 +56,15 @@ export class ClienteService {
 
   //Implementando el guardar (create)
   create(cliente: Cliente): Observable<Cliente>{
-    return this.http.post<Cliente>(this.urlEndPoint, cliente, {headers: this.HttpHeaders}).pipe(
+    return this.http.post<Cliente>(this.urlEndPoint, cliente).pipe(
         map((response: any) => response.cliente as Cliente),
         catchError(e => {
-
           if(e.status==400){
             return throwError(() => e);
           }
-
-          console.log(e.error.mensaje);
-          Swal.fire('Error al crear al cliente', e.error.mensaje, 'error');
+          if( e.error.mensaje){
+            console.log(e.error.mensaje);
+          }
           return throwError(() => e);
         })
     );
@@ -78,32 +73,35 @@ export class ClienteService {
   getCliente(id: number): Observable<Cliente>{
     return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
-          this.router.navigate(['/clientes']);
-          console.log(e.error.mensaje);
-          Swal.fire('Error al editar', e.error.mensaje, 'error');
+          if(e.status!=401 && e.error.mensaje){
+            this.router.navigate(['/clientes']);
+            console.log(e.error.mensaje);
+          }
           return throwError(() => e);
       })
     );
   }
 
   update(cliente: Cliente): Observable<any>{
-    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.HttpHeaders}).pipe(
+    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente).pipe(
       catchError(e => {
           if(e.status==400){
             return throwError(() => e);
           }
-          console.log(e.error.mensaje);
-          Swal.fire('Error al editar', e.error.mensaje, 'error');
+          if( e.error.mensaje){
+            console.log(e.error.mensaje);
+          }
           return throwError(() => e);
       })
     );
   }
   //borrar cliente
   delete(id: number): Observable<Cliente>{
-    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.HttpHeaders}).pipe(
+    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
-          console.log(e.error.mensaje);
-          Swal.fire('Error al eliminar', e.error.mensaje, 'error');
+          if(e.error.mensaje){
+            console.log(e.error.mensaje);
+          }
           return throwError(() => e);
       })
     );
