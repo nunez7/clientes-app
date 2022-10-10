@@ -33,6 +33,11 @@ export class ClienteService {
   //metodo para verificar  si esta logeado
   private isNoAutorizado(e): boolean{
     if(e.status==401){
+      //cerrar sesion cuando el token expira
+      if(this.authService.isAuthenticated()){
+        this.authService.logout();
+      }
+
       this.router.navigate(['/login']);
       return true;
     }
