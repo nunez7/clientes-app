@@ -23,7 +23,7 @@ export class AuthService {
     return new Usuario();
   }
 
-  public getToken(): string{
+  public get token(): string{
     if(this._token != null){
       return this._token;
     }else if(this._token == null && sessionStorage.getItem('token') !=null){
@@ -71,5 +71,13 @@ export class AuthService {
       return JSON.parse(atob(accessToken.split(".")[1]));
     }
     return null;
+  }
+
+  isAuthenticated(): boolean{
+    let payload = this.obtenerDatosToken(this.token);
+    if(payload != null && payload.user_name && payload.user_name.length > 0){
+      return true;
+    }
+    return false;
   }
 }
