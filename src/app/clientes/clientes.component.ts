@@ -7,6 +7,7 @@ import { tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import {ActivatedRoute } from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AuthService} from '../usuarios/auth.service';
 
 @Component({
   selector: 'app-clientes',
@@ -22,7 +23,8 @@ export class ClientesComponent implements OnInit {
   constructor(private clienteService: ClienteService,
   private activatedRoute: ActivatedRoute,
   private modalService: NgbModal,
-  private serviceModal: ModalService) { }
+  private serviceModal: ModalService,
+  public authService: AuthService) { }
 
   //Asignamos los valores del array
   ngOnInit(): void {

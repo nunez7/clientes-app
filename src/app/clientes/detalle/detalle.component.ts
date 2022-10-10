@@ -5,6 +5,7 @@ import { ModalService } from '../detalle/modal.service';
 import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {AuthService} from '../../usuarios/auth.service';
 
 @Component({
   selector: 'detalle-cliente',
@@ -18,7 +19,7 @@ export class DetalleComponent implements OnInit {
   progreso: number = 0;
 
   constructor(private clienteService: ClienteService, public activeModal: NgbActiveModal,
-    private modalService: ModalService) {}
+    private modalService: ModalService, public authService: AuthService) {}
 
   ngOnInit(): void {
   }

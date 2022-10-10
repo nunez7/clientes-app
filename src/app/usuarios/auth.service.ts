@@ -80,6 +80,14 @@ export class AuthService {
     }
     return false;
   }
+  //Los roles del usuario tienen ese rol
+  hasRole(role: string): boolean{
+    if(this.usuario.roles.includes(role)){
+      return true;
+    }
+    return false;
+  }
+
   //Eliminamos la sesion
   logout(): void{
     this._token = null;
