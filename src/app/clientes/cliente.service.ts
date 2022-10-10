@@ -18,9 +18,23 @@ export class ClienteService {
 
   //Establecemos la conexion
   constructor(private http: HttpClient, private router: Router) { }
+  //metodo para verificar  si esta logeado
+  private isNoAutorizado(e): boolean{
+    if(e.status==401 || e.status==403){
+      this.router.navigate(['/login']);
+      return true;
+    }
+    return false;
+  }
+
   //regiones de los clientes
   getRegiones(): Observable<Region[]>{
-    return this.http.get<Region[]>(this.urlEndPoint+'/regiones');
+    return this.http.get<Region[]>(this.urlEndPoint+'/regiones').pipe(
+      catchError(e => {
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );
   }
   //Observable es patron que verifica cambios
   //Of convierte los datos
@@ -63,6 +77,9 @@ export class ClienteService {
     return this.http.post<Cliente>(this.urlEndPoint, cliente, {headers: this.HttpHeaders}).pipe(
         map((response: any) => response.cliente as Cliente),
         catchError(e => {
+          if(this.isNoAutorizado(e)){
+            return throwError(() => e);
+          }
 
           if(e.status==400){
             return throwError(() => e);
@@ -78,6 +95,9 @@ export class ClienteService {
   getCliente(id: number): Observable<Cliente>{
     return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
+          if(this.isNoAutorizado(e)){
+            return throwError(() => e);
+          }
           this.router.navigate(['/clientes']);
           console.log(e.error.mensaje);
           Swal.fire('Error al editar', e.error.mensaje, 'error');
@@ -89,6 +109,10 @@ export class ClienteService {
   update(cliente: Cliente): Observable<any>{
     return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.HttpHeaders}).pipe(
       catchError(e => {
+          if(this.isNoAutorizado(e)){
+            return throwError(() => e);
+          }
+
           if(e.status==400){
             return throwError(() => e);
           }
@@ -102,6 +126,9 @@ export class ClienteService {
   delete(id: number): Observable<Cliente>{
     return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.HttpHeaders}).pipe(
       catchError(e => {
+          if(this.isNoAutorizado(e)){
+            return throwError(() => e);
+          }
           console.log(e.error.mensaje);
           Swal.fire('Error al eliminar', e.error.mensaje, 'error');
           return throwError(() => e);
@@ -118,6 +145,11 @@ export class ClienteService {
       reportProgress: true
     });
 
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError(e => {
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );
   }
 }
