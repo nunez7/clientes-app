@@ -4,14 +4,14 @@
       <form>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Usuario</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Username" autofocus required>
+          <input type="text" class="form-control" id="username" [(ngModel)]="usuario.username" name="username" placeholder="Username" autofocus required>
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="******" required>
+          <input type="password" class="form-control" id="password" [(ngModel)]="usuario.password" name="password" placeholder="******" required>
         </div>
         <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary">Entrar</button>
+          <button type="submit" (click)='login()' class="btn btn-primary">Entrar</button>
         </div>
   </form>
   </div>
