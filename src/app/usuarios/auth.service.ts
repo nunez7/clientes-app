@@ -67,7 +67,7 @@ export class AuthService {
   }
 
   obtenerDatosToken(accessToken: string): any{
-    if(accessToken!=null){
+    if(accessToken!=null && accessToken != undefined){
       return JSON.parse(atob(accessToken.split(".")[1]));
     }
     return null;
@@ -79,5 +79,13 @@ export class AuthService {
       return true;
     }
     return false;
+  }
+  //Eliminamos la sesion
+  logout(): void{
+    this._token = null;
+    this._usuario = null;
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('usuario');
+    //sessionStorage.clear();
   }
 }
