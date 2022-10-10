@@ -22,7 +22,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let cliente of clientes">
-            <td *ngIf="authService.hasRole('ROLE_USER')">
+            <td *ngIf="authService.hasRole('ROLE_USER', 'ROLE_ADMIN')">
               <img *ngIf="cliente?.foto"  (click)="abrirModal(cliente)"
               class="img-fluid rounded" style="width: 64px; cursor: pointer;"
               src="http://localhost:8883/backend-apirest/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}">
