@@ -1,11 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Cliente} from '../cliente';
 import { ClienteService } from '../cliente.service';
+import { FacturaService } from '../../facturas/services/factura.service';
 import { ModalService } from '../detalle/modal.service';
 import Swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthService} from '../../usuarios/auth.service';
+import { Factura } from '../../facturas/models/factura';
 
 @Component({
   selector: 'detalle-cliente',
@@ -19,7 +21,8 @@ export class DetalleComponent implements OnInit {
   progreso: number = 0;
 
   constructor(private clienteService: ClienteService, public activeModal: NgbActiveModal,
-    private modalService: ModalService, public authService: AuthService) {}
+    private modalService: ModalService, public authService: AuthService,
+    private facturaService: FacturaService) {}
 
   ngOnInit(): void {
   }
@@ -58,5 +61,34 @@ export class DetalleComponent implements OnInit {
         }
       );
       }
+  }
+  
+  delete(factura: Factura): void {
+    Swal.fire({
+      title: 'Estás seguro?',
+      text: "Borrarás la factura y sus detalles, ¿Continuar?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borrar!',
+      cancelButtonText: 'No, cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Borramos tras confirmar
+        this.facturaService.delete(factura.id).subscribe(
+          response => {
+            //Quitamos del cliente
+            this.cliente.facturas = this.cliente.facturas.filter(f => f !== factura)
+            //Enviamos el mensaje
+            Swal.fire(
+              'Factura eliminada!',
+              'Factura eliminada con éxito',
+              'success'
+            )
+          }
+        )
+      }
+    })
   }
 }

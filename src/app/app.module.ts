@@ -27,6 +27,7 @@ import {RoleGuard} from './usuarios/guards/role.guard';
 import {TokenInterceptor} from './usuarios/interceptors/token.interceptor';
 import {AuthInterceptor} from './usuarios/interceptors/auth.interceptor';
 import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
+import { FacturasComponent } from './facturas/facturas.component';
 
 //Config del idioma
 registerLocaleData(localeES, 'es');
@@ -53,7 +54,8 @@ const routes: Routes = [
     PaginatorComponent,
     DetalleComponent,
     LoginComponent,
-    DetalleFacturaComponent
+    DetalleFacturaComponent,
+    FacturasComponent
   ],
   imports: [
     BrowserModule,
