@@ -34,7 +34,7 @@
               </div>
           </div>
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4" *ngIf="authService.hasRole('ROLE_ADMIN')">
               <button type="button" name="button" [routerLink]="['/facturas/form', cliente.id]" class="btn btn-primary" (click)="activeModal.close('Close click')">Crear factura</button>
             </div>
           </div>
@@ -65,7 +65,7 @@
                       [routerLink]="['/facturas', factura.id]"
                       (click)="activeModal.close('Close click')"
                       >Ver</button>
-                      <button type="button" name="button" (click)='delete(factura)' class="ml-2 btn btn-danger">Borrar</button>
+                      <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" name="button" (click)='delete(factura)' class="ml-2 btn btn-danger">Borrar</button>
                     </div>
                     </td>
                   </tr>
