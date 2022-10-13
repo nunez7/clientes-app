@@ -63,4 +63,17 @@ export class FacturasComponent implements OnInit {
     event.option.deselect();
   }
 
+  actualizarcantidad(id:number, event:any): void{
+    //Buscamos la cantidad a traves del evento
+    let cantidad: number = event.target.value as number;
+    //Reasignamos el valor en el array
+    this.factura.items = this.factura.items.map((item: ItemFactura) => {
+      //Buscamos el producto en el array y asignamos la nueva cantidad
+      if(id === item.producto.id){
+        item.cantidad = cantidad;
+      }
+      return item;
+    });
+  }
+
 }
