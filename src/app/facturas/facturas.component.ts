@@ -51,12 +51,15 @@ export class FacturasComponent implements OnInit {
 
   seleccionarProducto(event: MatAutocompleteSelectedEvent): void{
     let producto = event.option.value as Producto;
-    //console.log(producto);
-    //Agregamos el item a la factura
-    let nuevoItem = new ItemFactura();
-    nuevoItem.producto = producto;
-    this.factura.items.push(nuevoItem);
-
+    //Se verifica si existe el producto
+    if(this.existeItem(producto.id)){
+      this.incrementaCantidad(producto.id);
+    }else{
+      //Agregamos el item a la factura
+      let nuevoItem = new ItemFactura();
+      nuevoItem.producto = producto;
+      this.factura.items.push(nuevoItem);
+    }
     //limpiamos el autocomplete
     this.autoCompleteControl.setValue('');
     event.option.focus();
@@ -71,6 +74,26 @@ export class FacturasComponent implements OnInit {
       //Buscamos el producto en el array y asignamos la nueva cantidad
       if(id === item.producto.id){
         item.cantidad = cantidad;
+      }
+      return item;
+    });
+  }
+
+  existeItem(id:number): boolean{
+    let existe = false;
+    this.factura.items.forEach((item: ItemFactura)=> {
+      if(id===item.producto.id){
+        existe = true;
+      }
+    });
+    return existe;
+  }
+
+  incrementaCantidad(id:number): void{
+    this.factura.items = this.factura.items.map((item: ItemFactura) => {
+      //Buscamos el producto en el array y asignamos la nueva cantidad
+      if(id === item.producto.id){
+        ++item.cantidad;
       }
       return item;
     });
