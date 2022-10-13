@@ -54,27 +54,34 @@ export class FormComponent implements OnInit {
   create(): void{
     //console.log(this.cliente);
     this.clienteService.create(this.cliente)
-    .subscribe(cliente =>{
-      this.router.navigate(['/clientes'])
-      Swal.fire('Nuevo cliente', `El cliente ${cliente.nombre} ha sido creado con éxito`, 'success')
-    },
-    err => {
-      this.errores = err.error.error as string[];
-      console.error('Código del error: '+err.status);
+    .subscribe(
+      {
+        next: (cliente) => {
+          this.router.navigate(['/clientes'])
+          Swal.fire('Nuevo cliente', `El cliente ${cliente.nombre} ha sido creado con éxito`, 'success')
+        },
+        error: (e) => {
+          this.errores = e.error.error as string[];
+          console.error('Código del error: '+e.status);
+        },
+        complete: () => {console.info('complete') }
     }
-  );
+    );
   }
 
   update():void{
     this.cliente.facturas = null;
     this.clienteService.update(this.cliente)
-    .subscribe(json =>{
-      this.router.navigate(['/clientes'])
-      Swal.fire('Cliente actualizado', `${json.mensaje}: ${json.cliente.nombre}`, 'success')
-    },
-    err => {
-      this.errores = err.error.error as string[];
-      console.error('Código del error: '+err.status);
+    .subscribe({
+      next: (json) => {
+        this.router.navigate(['/clientes'])
+        Swal.fire('Cliente actualizado', `${json.mensaje}: ${json.cliente.nombre}`, 'success')
+      },
+      error: (e) => {
+        this.errores = e.error.error as string[];
+        console.error('Código del error: '+e.status);
+      },
+      complete: () => {console.info('complete actualizacion cliente') }
     }
   );
   }
