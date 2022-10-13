@@ -20,8 +20,10 @@ export class DetalleComponent implements OnInit {
   public fotoSeleccionada: any;
   progreso: number = 0;
 
-  constructor(private clienteService: ClienteService, public activeModal: NgbActiveModal,
-    private modalService: ModalService, public authService: AuthService,
+  constructor(public clienteService: ClienteService, 
+    public activeModal: NgbActiveModal,
+    public modalService: ModalService, 
+    public authService: AuthService,
     private facturaService: FacturaService) {}
 
   ngOnInit(): void {
