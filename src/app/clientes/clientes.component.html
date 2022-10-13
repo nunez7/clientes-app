@@ -37,6 +37,7 @@
             <td>{{ cliente.createAt }}</td>
             <td *ngIf="authService.hasRole('ROLE_ADMIN')">
               <div class="btn-group" role="group">
+              <button type="button" name="button" [routerLink]="['/facturas/form', cliente.id]" class="btn btn-primary">Crear factura</button>
               <button type="button" name="button" routerLink="/clientes/form/{{cliente.id}}" class="btn btn-warning">Editar</button>
               <button type="button" name="button" (click)='delete(cliente)' class="ml-2 btn btn-danger">Borrar</button>
               </div>

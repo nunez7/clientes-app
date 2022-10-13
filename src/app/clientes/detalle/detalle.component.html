@@ -33,6 +33,45 @@
                   <img *ngIf="cliente?.foto" class="img-fluid rounded" width="80%" src="http://localhost:8883/backend-apirest/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}">
               </div>
           </div>
+          <div class="row">
+            <div class="col-md-4" *ngIf="authService.hasRole('ROLE_ADMIN')">
+              <button type="button" name="button" [routerLink]="['/facturas/form', cliente.id]" class="btn btn-primary" (click)="activeModal.close('Close click')">Crear factura</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="alert alert-info my-4" *ngIf="cliente.facturas.length==0">
+              El cliente no tiene Facturas asignadas
+            </div>
+            <table class="table table-bordered table-striped my-4" *ngIf="cliente.facturas.length>0">
+                <thead>
+                    <tr>
+                      <th>Folio</th>
+                      <th>Descripción</th>
+                      <th>Fecha</th>
+                      <th>Total</th>
+                      <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let factura of cliente.facturas">
+                    <td>{{factura.id}}</td>
+                    <td>{{factura.descripcion}}</td>
+                    <td>{{factura.createAt}}</td>
+                    <td>{{factura.total}}</td>
+                    <td>
+                      <div class="btn-group" role="group">
+                      <button class="btn btn-primary btn-sm" 
+                      type="button"
+                      [routerLink]="['/facturas', factura.id]"
+                      (click)="activeModal.close('Close click')"
+                      >Ver</button>
+                      <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" name="button" (click)='delete(factura)' class="ml-2 btn btn-danger">Borrar</button>
+                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+          </div>
         </div>
 </div>
 <div class="modal-footer">

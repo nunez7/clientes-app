@@ -39,10 +39,10 @@ export class ClientesComponent implements OnInit {
     this.clienteService.getClientes(page)
     .pipe(
       tap(response => {
-        console.log('ClienteComponent: tap 3');
+        //console.log('ClienteComponent: tap 3');
         (response.content as Cliente[]).forEach(
           cliente => {
-            console.log(cliente.nombre);
+            //console.log(cliente.nombre);
           }
         );
       })

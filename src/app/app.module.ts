@@ -19,13 +19,16 @@ import { MatInputModule} from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDatepickerModule} from '@angular/material/datepicker';
 import { MatMomentDateModule} from '@angular/material-moment-adapter';
+import { MatAutocompleteModule} from '@angular/material/autocomplete';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './usuarios/login.component';
-import {AuthGuard} from './usuarios/guards/auth.guard';
-import {RoleGuard} from './usuarios/guards/role.guard';
-import {TokenInterceptor} from './usuarios/interceptors/token.interceptor';
-import {AuthInterceptor} from './usuarios/interceptors/auth.interceptor';
+import { AuthGuard} from './usuarios/guards/auth.guard';
+import { RoleGuard} from './usuarios/guards/role.guard';
+import { TokenInterceptor} from './usuarios/interceptors/token.interceptor';
+import { AuthInterceptor} from './usuarios/interceptors/auth.interceptor';
+import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
+import { FacturasComponent } from './facturas/facturas.component';
 
 //Config del idioma
 registerLocaleData(localeES, 'es');
@@ -38,6 +41,8 @@ const routes: Routes = [
   {path: 'clientes/form', component:FormComponent, canActivate: [AuthGuard, RoleGuard], data:{role: 'ROLE_ADMIN'}},
   {path: 'clientes/form/:id', component:FormComponent, canActivate: [AuthGuard,  RoleGuard], data:{role: 'ROLE_ADMIN'}},
   {path: 'login', component:LoginComponent},
+  {path: 'facturas/:id', component: DetalleFacturaComponent, canActivate: [AuthGuard,  RoleGuard], data:{role: 'ROLE_USER'}},
+  {path: 'facturas/form/:clienteId', component: FacturasComponent, canActivate: [AuthGuard,  RoleGuard], data:{role: 'ROLE_ADMIN'}},
 ];
 
 @NgModule({
@@ -50,7 +55,9 @@ const routes: Routes = [
     FormComponent,
     PaginatorComponent,
     DetalleComponent,
-    LoginComponent
+    LoginComponent,
+    DetalleFacturaComponent,
+    FacturasComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +70,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatDatepickerModule,
     MatMomentDateModule,
+    MatAutocompleteModule,
     NgbModule
   ],
   providers: [ClienteService,
