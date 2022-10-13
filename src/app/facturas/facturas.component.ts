@@ -9,6 +9,7 @@ import { FacturaService } from './services/factura.service';
 import { Producto } from './models/producto';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ItemFactura } from './models/item-factura';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,11 +22,13 @@ export class FacturasComponent implements OnInit {
   factura: Factura = new Factura();
   autoCompleteControl = new FormControl();
   productosFiltrados: Observable<Producto[]>;
+  facturaForm!: FormGroup;
 
   constructor(private clienteService: ClienteService,
     private activatedRoute: ActivatedRoute,
     private facturaService: FacturaService,
-    private router: Router) { }
+    private router: Router,
+    private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -39,7 +42,14 @@ export class FacturasComponent implements OnInit {
       map(value => typeof value === 'string'? value: value.nombre),
       mergeMap(value => value ? this._filter(value): []),
     );
+    this.facturaForm = this.initForm();
   }
+
+  initForm(): FormGroup{
+    return this.fb.group({
+      descripcion: ['', [Validators.required, Validators.minLength(6)]],
+    })
+}
 
   private _filter(value: string): Observable<Producto[]> {
     const filterValue = value.toLowerCase();
@@ -108,12 +118,21 @@ export class FacturasComponent implements OnInit {
     this.factura.items = this.factura.items.filter((item:ItemFactura)=> id !== item.producto.id);
   }
 
-  create():void{
-    console.log(this.factura);
-    this.facturaService.create(this.factura).subscribe(factura => {
-      Swal.fire(this.titulo, `Factura ${factura.descripcion} creada con éxito!`, 'success');
-      this.router.navigate(['/clientes']);
-    });
-  }
+  create(facturaForm: any):void{
+    if(this.factura.items.length==0){
+      Swal.fire('Datos requeridos', 'Agrega productos a la factura', 'warning');
+    }
+    if(!facturaForm.valid){
+      Swal.fire('Datos requeridos', 'Agrega una descripción a la factura que tenga minimo 6 caracteres', 'warning');
+    }
+    if(facturaForm.valid && this.factura.items.length>0){
+      //console.log(this.factura);
+      this.facturaService.create(this.factura).subscribe(factura => {
+        Swal.fire(this.titulo, `Factura ${factura.descripcion} creada con éxito!`, 'success');
+        this.router.navigate(['/clientes']);
+      });
+    }else{
 
+    }
+  }
 }
