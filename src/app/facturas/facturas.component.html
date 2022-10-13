@@ -7,7 +7,7 @@
         >
       </h4>
 
-      <form action="" method="post" [formGroup]="facturaForm" novalidate>
+      <form action="" method="post" #facturaForm="ngForm">
         <div class="form-group row" *ngIf="factura.cliente">
             <label for="cliente" class="col-sm-2 col-form-label">Cliente</label>
             <div class="col-sm-6">
@@ -17,7 +17,10 @@
         <div class="form-group row mt-1">
             <label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
             <div class="col-sm-6">
-                <input type="text" [(ngModel)]="factura.descripcion" class="form-control" name="descripcion" id="descripcion" formControlName="descripcion" />
+                <input type="text" name="descripcion" [(ngModel)]="factura.descripcion" class="form-control" required #descripcion="ngModel">
+                <div class="alert alert-danger" *ngIf="descripcion.invalid && descripcion.touched || descripcion.invalid && facturaForm.submitted">
+                    La descripción es requerida.
+                </div>
             </div>
         </div>
         <div class="form-group row mt-1">
@@ -44,6 +47,9 @@
               </mat-form-field>
             </div>
         </div>
+        <div class="alert alert-danger" *ngIf="autoCompleteControl.invalid && facturaForm.submitted">
+            La factura no puede no tener líneas!.
+          </div>
         <div class="alert alert-info my-4" *ngIf="factura.items.length==0">
             No hay líneas asignadas en la factura. Debe agregar productos!
         </div>
